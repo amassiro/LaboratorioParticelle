@@ -116,6 +116,29 @@ void draw () {
   
   
   
+  TCanvas* cc5 = new TCanvas ("cc5", "", 800, 600);
+  
+  TH1F* histo3 = new TH1F("histo3", "", 100, 50 , 300);
+  for (int i = 0; i < 100; ++i) histo3->Fill(r3->Gaus(150.,10.));
+    
+  histo3->Draw();
+  
+  TF1 *f4 = new TF1("f4", "gaus(0)", 50, 300);  
+  //
+  // gaus(0) is a substitute for [0]*exp(-0.5*((x-[1])/[2])**2) and (0) means start numbering parameters at 0.
+  //
+  f4->SetParameter(0, 1000);
+  f4->SetParameter(1, 150);
+  f4->SetParameter(2, 10);
+//   f3->SetParameter(4, 100);
+  
+  histo3->Fit("f4", "RMQ");
+  
+  std::cout << " f4:: normalizzazione [0]       = " << fabs(f4->GetParameter(0)) << " +/- " << f4->GetParError(0) << std::endl;
+  std::cout << " f4:: normalizzazione gaussiana = " << fabs(f4->GetParameter(0)*f4->GetParameter(2)) << " +/- " << f4->GetParError(0)*f4->GetParameter(2) << std::endl;
+  std::cout << " f4:: mean gaussiana            = " << f4->GetParameter(1) << " +/- " << f4->GetParError(1) << std::endl;
+  std::cout << " f4:: sigma gaussiana           = " << f4->GetParameter(2) << " +/- " << f4->GetParError(2) << std::endl;
+  
   
 }
 
